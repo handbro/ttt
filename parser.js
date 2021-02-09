@@ -138,7 +138,7 @@ class Parser extends chevrotain.EmbeddedActionsParser {
                     let name = $.CONSUME2(tokens.identifier).image;
                     params.push({
                         type: type,
-                        name: name,
+                        name: '$' + name,
                     });
                 }
             });

@@ -215,13 +215,16 @@ class Compiler{
 
         // create a scope for the function
         this.scopes.unshift({accumulated: 0});
-        // TODO: parameter
 
         // function prologue
         //    push bp into stack, as bp has the base pointer of caller, and callee should not change the bp, so pushing the value in order to restore later
         //    mov sp into bp, in order to store current stack frame address to bp
         this.push_bytes(asm('push_reg', 'bp'));
         this.push_bytes([0x89, 0xe5]); // mov bp, sp
+
+        for (let i = 0; i < ast.params.length; i++){
+            this.scopes[0][ast.params[i].name] = -(i + 2) * 2;
+        }
 
         // compile the function body
         for (let s of ast.body){
