@@ -51,7 +51,18 @@
     </head>
     <body>
         <div style="height: calc(100vh - 420px); width: calc(100% - 640px); display: inline-block">
-            <textarea id="code-input">int main(){
+            <textarea id="code-input">int test(int a, int b, char* s1, char* s2, char* s3){
+    if (a > b){
+        puts(s1);
+    }else if (a < b){
+        puts(s2);
+    }else{
+        puts(s3);
+    }
+    return 0;
+}
+
+int main(){
     char* s1;
     s1 = "Greater than 10\n\n";
     char* s2;
@@ -59,15 +70,20 @@
     char* s3;
     s3 = "Equal to 10\n\n";
 
-    int i;
-    i = 10;
-    if       (i > 10){
-        puts(s1);
-    }else if (i < 10){
-        puts(s2);
-    }else{
-        puts(s3);
+    int n;
+    n = 0;
+    char* hello;
+    hello = "Hello\n";
+    while (n < 10){
+        puts(hello);
+        n = n + 1;
     }
+
+    int i;
+    i = 11;
+    test(i, 10, s1, s2, s3);
+    test(i-2, 10, s1, s2, s3);
+    test(i-1, 10, s1, s2, s3);
     return 0;
 }</textarea>
         </div><div style="width: 640px; height: calc(100vh - 420px); display: inline-block;">
