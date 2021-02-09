@@ -247,7 +247,7 @@ class Compiler{
         else if (s.statement == 'expression')   this.compile_expression(s.expression);
         else if (s.statement == 'return')       this.compile_return_statement(s);
         else if (s.statement == 'if')           this.compile_if_statement(s);
-        else                                    throw new Error(`${s.statement} statement not supported`);
+        else                                    this.compile_while_statement(s);
     }
     compile_declare_statement(ast){
         // check redefinition
@@ -443,6 +443,22 @@ class Compiler{
             this.bytes[a  ] = exit_address[0];
             this.bytes[a+1] = exit_address[1];
         }
+    }
+    compile_while_statement(ast){
+        let condition_begin = this.byte_length;
+        this.compile_expression(ast.condition);
+        // skip the body if condition is zero
+        this.push_bytes([0x85, 0xc0]);  // test ax, ax
+        this.push_bytes([0x74, 0x00]);  // jz          // offset filled later
+
+        // body
+        let body_begin = this.byte_length;
+        for (let s of ast.body){
+            this.compile_statement(s);
+        }
+        let end = this.byte_length;
+        this.push_bytes([0xeb, ...imm8(-(end - condition_begin + 2))]); // jmp
+        this.bytes[body_begin - 1] = imm8(end - body_begin + 2)[0];
     }
 };
 
